@@ -9,7 +9,7 @@
     },
     "Generate Ico": {
       "commandName": "Project",
-      "commandLineArgs": "--svg C:\\Work\\MidwifeCompanion\\assets\\logo.svg output.ico"
+      "commandLineArgs": "--svg logo.svg output.ico"
     }
   }
 }

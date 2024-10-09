@@ -1,10 +1,6 @@
 ﻿using System.CommandLine;
-
-using BluwolfIcons;
-
-using SkiaSharp;
-
-using SKSvg = SkiaSharp.Extended.Svg.SKSvg;
+using System.Drawing;
+using System.Drawing.Imaging;
 
 namespace IconBuilder;
 
@@ -46,61 +42,51 @@ public sealed class Program
             }
             FileInfo inputFile = parseResult.CommandResult.GetValue(svgFile)!;
             FileInfo output = parseResult.CommandResult.GetValue(outputFile)!;
-
+            output.Delete();
             using var outputStream = output.OpenWrite();
-            CreateIco(inputFile, outputStream);
+
+            var svg = Svg.SvgDocument.Open(inputFile.FullName);
+            
+            //TODO: Make configurable
+            int[] sizes = [256, 128, 64, 48, 32, 24, 16];
+
+            var images = sizes.Select(size => svg.Draw(size, size)).ToArray();
+            WriteIcon(outputStream, images);
+
         });
         return new CliConfiguration(rootCommand);
     }
 
-    private static void CreateIco(FileInfo svgFile, Stream outputStream)
+    private static void WriteIcon(Stream stream, Bitmap[] images)
     {
-        var icon = new Icon();
-        SKSvg svg = LoadSvg(svgFile);
-
-        //TODO: Make this size list configurable
-        foreach (var size in new[] { 256, 128, 64, 48, 32, 24, 16 })
+        using BinaryWriter binaryWriter = new(stream);
+        binaryWriter.Write((ushort)0);
+        binaryWriter.Write((ushort)1);
+        binaryWriter.Write((ushort)images.Length);
+        Queue<byte[]> queue = new(images.Length);
+        int num = 6 + 16 * images.Length;
+        foreach (var image in images)
         {
-            IIconImage image = RasterizeImage(svg, size);
-            icon.Images.Add(image);
+            binaryWriter.Write((byte)image.Width);
+            binaryWriter.Write((byte)image.Height);
+            binaryWriter.Write((byte)0);
+            binaryWriter.Write((byte)0);
+            binaryWriter.Write((ushort)1);
+            binaryWriter.Write((ushort)32);
+            //TODO: Support bitmap with transparency mask
+            using var ms = new MemoryStream();
+            image.Save(ms, ImageFormat.Png);
+            byte[] data = ms.ToArray();
+            binaryWriter.Write((uint)data.Length);
+            binaryWriter.Write((uint)num);
+            num += data.Length;
+            queue.Enqueue(data);
         }
 
-        icon.Save(outputStream);
+        while (queue.Count > 0)
+        {
+            binaryWriter.Write(queue.Dequeue());
+        }
     }
 
-    private static SKSvg LoadSvg(FileInfo svgFile)
-    {
-        var svg = new SKSvg();
-        using var stream = svgFile.OpenRead();
-        svg.Load(stream);
-        return svg;
-    }
-
-    private static RawIconImage RasterizeImage(SKSvg svg, int size)
-    {
-        //Based on: https://gist.github.com/punker76/67bd048ff403c1c73737905183f819a9
-        var imageInfo = new SKImageInfo(size, size);
-        using var surface = SKSurface.Create(imageInfo);
-        using var canvas = surface.Canvas;
-        // calculate the scaling need to fit to screen
-        float scaleX = size / svg.Picture.CullRect.Width;
-        float scaleY = size / svg.Picture.CullRect.Height;
-        var matrix = SKMatrix.MakeScale(scaleX, scaleY);
-
-        canvas.Clear(SKColors.Transparent);
-        canvas.DrawPicture(svg.Picture, ref matrix);
-        canvas.Flush();
-
-        using var image = surface.Snapshot();
-        using var data = image.Encode(SKEncodedImageFormat.Png, 100);
-        return new RawIconImage(size, imageInfo.BitsPerPixel, data.ToArray());
-    }
-
-    private class RawIconImage(int size, int bitsPerPixel, byte[] date) : IIconImage
-    {
-        public int Width { get; } = size;
-        public int Height { get; } = size;
-        public int BitsPerPixel { get; } = bitsPerPixel;
-        public byte[] GetData() => date;
-    }
 }
