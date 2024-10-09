@@ -1,0 +1,50 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IconBuilder", "IconBuilder\IconBuilder.csproj", "{55D459AD-9D92-4A4A-ADAB-D0143BA39451}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D88D7F20-19C5-42B4-8561-874CC78B134A}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		Directory.Build.props = Directory.Build.props
+		Directory.Build.targets = Directory.Build.targets
+		Directory.Packages.props = Directory.Packages.props
+		exclusions.dic = exclusions.dic
+		NuGet.config = NuGet.config
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{6E32D310-8A68-4061-82C9-4A0040537448}"
+	ProjectSection(SolutionItems) = preProject
+		.github\dependabot.yml = .github\dependabot.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{D73E76B4-8613-4EF2-A925-0766B9E8B02C}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\build-and-deploy.yml = .github\workflows\build-and-deploy.yml
+		.github\workflows\pr-code-coverage-comment.yml = .github\workflows\pr-code-coverage-comment.yml
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{55D459AD-9D92-4A4A-ADAB-D0143BA39451}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{55D459AD-9D92-4A4A-ADAB-D0143BA39451}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{55D459AD-9D92-4A4A-ADAB-D0143BA39451}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{55D459AD-9D92-4A4A-ADAB-D0143BA39451}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{6E32D310-8A68-4061-82C9-4A0040537448} = {D88D7F20-19C5-42B4-8561-874CC78B134A}
+		{D73E76B4-8613-4EF2-A925-0766B9E8B02C} = {6E32D310-8A68-4061-82C9-4A0040537448}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DF353750-2089-4072-9508-65E9DC66DF2D}
+	EndGlobalSection
+EndGlobal

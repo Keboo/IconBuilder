@@ -1,0 +1,15 @@
+{
+  "profiles": {
+    "IconBuilder": {
+      "commandName": "Project"
+    },
+    "Display Help": {
+      "commandName": "Project",
+      "commandLineArgs": "--help"
+    },
+    "Generate Ico": {
+      "commandName": "Project",
+      "commandLineArgs": "--svg C:\\Work\\MidwifeCompanion\\assets\\logo.svg output.ico"
+    }
+  }
+}

@@ -1,0 +1,31 @@
+<!--
+  This enabled central package management. 
+  This allows for controling all NuGet packages within the Directory.Packages.props file
+  See https://learn.microsoft.com/nuget/consume-packages/Central-Package-Management?WT.mc_id=DT-MVP-5003472
+  -->
+<Project>
+  <!--
+  Uncomment if you need to enable inclusion of another Directory.Packages.props file from a parent directory
+  <Import Project="$([MSBuild]::GetPathOfFileAbove(Directory.Packages.props, $(MSBuildThisFileDirectory)..))" />
+  -->
+  <!-- This property enables the Central Package Management feature -->
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    <!-- https://learn.microsoft.com/nuget/consume-packages/Central-Package-Management?WT.mc_id=DT-MVP-5003472#transitive-pinning -->
+    <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
+  </PropertyGroup>
+  <!--
+  This defines the set of centrally managed packages.
+  This would typically list all NuGet packages used within this solution.
+  -->
+  <ItemGroup>
+    <PackageVersion Include="BluwolfIcons" Version="1.0.1" />
+    <PackageVersion Include="coverlet.collector" Version="6.0.2">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageVersion>
+    <PackageVersion Include="SkiaSharp.NativeAssets.Win32" Version="2.88.8" />
+    <PackageVersion Include="SkiaSharp.Svg" Version="1.60.0" />
+    <PackageVersion Include="System.CommandLine" Version="2.0.0-beta4.24324.3" />
+  </ItemGroup>
+</Project>
